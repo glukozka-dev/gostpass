@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- Главное окно входа -->
+  <object class="GtkApplicationWindow" id="main_window">
+    <property name="title">GostPass - Менеджер паролей</property>
+    <property name="default-width">600</property>
+    <property name="default-height">400</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <property name="margin-top">12</property>
+        <property name="margin-bottom">12</property>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+
+        <!-- Верхняя панель с кнопками -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkButton" id="new_db_button">
+                <property name="label">Новая БД</property>
+                <property name="halign">start</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="open_db_button">
+                <property name="label">Открыть БД</property>
+                <property name="halign">start</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Центральная область с вводом пароля -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="vexpand">true</property>
+            <child>
+              <object class="GtkEntry" id="password_entry">
+                <property name="placeholder-text">Введите пароль</property>
+                <property name="visibility">false</property>
+                <property name="width-chars">30</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="submit_password_button">
+                <property name="label">Ввод</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Область для сообщений об ошибках -->
+        <child>
+          <object class="GtkRevealer" id="error_revealer">
+            <property name="reveal-child">false</property>
+            <property name="transition-type">slide-down</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <property name="spacing">6</property>
+                <property name="halign">center</property>
+                <style>
+                  <class name="error"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">dialog-error-symbolic</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="error_label">
+                    <property name="label">Неверный пароль!</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+
+  <!-- Окно базы данных -->
+  <object class="GtkApplicationWindow" id="db_window">
+    <property name="title">GostPass - База данных</property>
+    <property name="default-width">800</property>
+    <property name="default-height">600</property>
+    <property name="hide-on-close">true</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <property name="margin-top">12</property>
+        <property name="margin-bottom">12</property>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+
+        <!-- Верхняя панель с кнопками -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkButton" id="new_entry_button">
+                <property name="label">Создать запись</property>
+                <property name="halign">start</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="lock_db_button">
+                <property name="label">Заблокировать БД</property>
+                <property name="halign">start</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Таблица записей -->
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="vexpand">true</property>
+            <property name="hexpand">true</property>
+            <child>
+              <object class="GtkListView" id="entries_listview">
+                <property name="factory">
+                  <object class="GtkBuilderListItemFactory">
+                    <property name="bytes">
+                      <![CDATA[
+                      <interface>
+                        <template class="GtkListItem">
+                          <property name="child">
+                            <object class="GtkBox">
+                              <property name="orientation">horizontal</property>
+                              <property name="spacing">12</property>
+                              <property name="margin-start">12</property>
+                              <property name="margin-end">12</property>
+                              <property name="margin-top">6</property>
+                              <property name="margin-bottom">6</property>
+
+                              <child>
+                                <object class="GtkLabel" id="entry_label">
+                                  <property name="xalign">0</property>
+                                </object>
+                              </child>
+
+                              <child>
+                                <object class="GtkButton" id="delete_entry_button">
+                                  <property name="label">Удалить</property>
+                                  <property name="halign">end</property>
+                                </object>
+                              </child>
+                            </object>
+                          </property>
+                        </template>
+                      </interface>
+                      ]]>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+
+  <!-- Окно создания новой записи -->
+  <object class="GtkWindow" id="new_entry_window">
+    <property name="title">GostPass - Новая запись</property>
+    <property name="default-width">400</property>
+    <property name="default-height">300</property>
+    <property name="modal">true</property>
+    <property name="resizable">false</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <property name="margin-top">12</property>
+        <property name="margin-bottom">12</property>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+
+        <!-- Поле для логина -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Логин:</property>
+                <property name="width-chars">10</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="new_login_entry">
+                <property name="placeholder-text">Введите логин</property>
+                <property name="hexpand">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Поле для пароля с кнопкой генерации -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Пароль:</property>
+                <property name="width-chars">10</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="new_password_entry">
+                <property name="placeholder-text">Введите пароль</property>
+                <property name="hexpand">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="generate_password_button">
+                <property name="label">Сгенерировать</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Поле для сайта -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Сайт:</property>
+                <property name="width-chars">10</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="new_url_entry">
+                <property name="placeholder-text">Введите URL сайта</property>
+                <property name="hexpand">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Кнопки действий -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <property name="halign">end</property>
+            <property name="margin-top">12</property>
+            <child>
+              <object class="GtkButton" id="save_entry_button">
+                <property name="label">Сохранить</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="cancel_entry_button">
+                <property name="label">Отмена</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
